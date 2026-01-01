@@ -58,11 +58,15 @@ image_path = args.image if args.image.is_absolute() else BASE_DIR / args.image
 output_path = args.output if args.output.is_absolute() else BASE_DIR / args.output
 output_path.parent.mkdir(parents=True, exist_ok=True)
 
+
 img_array = ensure_rgb_image(image_path)
 
-r_hist, r_bins = np.histogram(img_array[:, :, 0], bins=256, range=(0, 256))
-g_hist, g_bins = np.histogram(img_array[:, :, 1], bins=256, range=(0, 256))
-b_hist, b_bins = np.histogram(img_array[:, :, 2], bins=256, range=(0, 256))
+
+r_hist, r_bins = np.histogram(img_array[:, :, 0].ravel(), bins=256, range=(0, 256))
+g_hist, g_bins = np.histogram(img_array[:, :, 1].ravel(), bins=256, range=(0, 256))
+b_hist, b_bins = np.histogram(img_array[:, :, 2].ravel(), bins=256, range=(0, 256))
+
+
 
 plt.figure(figsize=(12, 6))
 plt.plot(r_bins[:-1], r_hist, color="red", label="Red", alpha=0.7)
