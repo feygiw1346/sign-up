@@ -53,37 +53,30 @@ def ensure_rgb_image(image_path: Path) -> np.ndarray:
     return img_array
 
 
-def main() -> None:
-    args = parse_args()
-    image_path = args.image if args.image.is_absolute() else BASE_DIR / args.image
-    output_path = args.output if args.output.is_absolute() else BASE_DIR / args.output
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+args = parse_args()
+image_path = args.image if args.image.is_absolute() else BASE_DIR / args.image
+output_path = args.output if args.output.is_absolute() else BASE_DIR / args.output
+output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    img_array = ensure_rgb_image(image_path)
+img_array = ensure_rgb_image(image_path)
 
-    r_hist, r_bins = np.histogram(img_array[:, :, 0], bins=256, range=(0, 256))
-    g_hist, g_bins = np.histogram(img_array[:, :, 1], bins=256, range=(0, 256))
-    b_hist, b_bins = np.histogram(img_array[:, :, 2], bins=256, range=(0, 256))
+r_hist, r_bins = np.histogram(img_array[:, :, 0], bins=256, range=(0, 256))
+g_hist, g_bins = np.histogram(img_array[:, :, 1], bins=256, range=(0, 256))
+b_hist, b_bins = np.histogram(img_array[:, :, 2], bins=256, range=(0, 256))
 
-    plt.figure(figsize=(12, 6))
-    plt.plot(r_bins[:-1], r_hist, color="red", label="Red", alpha=0.7)
-    plt.plot(g_bins[:-1], g_hist, color="green", label="Green", alpha=0.7)
-    plt.plot(b_bins[:-1], b_hist, color="blue", label="Blue", alpha=0.7)
-    plt.xlabel("Pixel Intensity")
-    plt.ylabel("Frequency")
-    plt.title("RGB Color Histogram")
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
+plt.figure(figsize=(12, 6))
+plt.plot(r_bins[:-1], r_hist, color="red", label="Red", alpha=0.7)
+plt.plot(g_bins[:-1], g_hist, color="green", label="Green", alpha=0.7)
+plt.plot(b_bins[:-1], b_hist, color="blue", label="Blue", alpha=0.7)
+plt.xlabel("Pixel Intensity")
+plt.ylabel("Frequency")
+plt.title("RGB Color Histogram")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
 
-    plt.savefig(output_path)
-    print(f"Histogram saved to '{output_path}'")
+plt.savefig(output_path)
 
-    if not args.no_show:
-        plt.show()
+if not args.no_show:
+    plt.show()
 
-    print("RGB histograms calculated and saved successfully.")
-
-
-if __name__ == "__main__":
-    main()
